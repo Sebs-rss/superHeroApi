@@ -17,15 +17,22 @@ function bringSuperHData(heroId) {
   $.ajax({
     url: apiUrl,
     method: 'GET',
+
     success: function(response) {
         console.log(response);
         //alert('Super Id: '+ heroId + '\n' + 'Super nombre: ' + response.name); //Comprueba que trae info
         //Método que recibe datos
         var nombre = response.name;
+        var nombreReal = response.biography['full-name'];
         var fuerza = response.powerstats.strength;
+        var raza = response.biography.race;
         var combat = response.powerstats.combat;
+        var alterEgo = response.biography['alter-egos'];
+        var inteligencia = response.powerstats.intelligence;
+        var poder = response.powerstats['power'];
+        var velocidad = response.powerstats.speed;
         var imagen = response.image.url;
-        renderizarData(nombre, fuerza, imagen);
+        renderizarData(nombre, fuerza, imagen, nombreReal, velocidad);
 
         //Enviar datos a una fn que los grafica
         renderizarGraphic(fuerza, combat);
@@ -57,7 +64,7 @@ $(document).ready(function() {
 
 
 //Función para renderizar en una card, tomando las variables capturadas arriba
-function renderizarData(nombre, fuerza, imagen) { 
+function renderizarData(nombre, fuerza, imagen, nombreReal, velocidad, raza, poder, inteligencia, alterEgo) { 
   //Seleccionar un Div del DOM
   var contenedor = document.getElementById('cardContainer');
   console.log(contenedor)
@@ -66,22 +73,28 @@ function renderizarData(nombre, fuerza, imagen) {
   <img src="${imagen}" class="card-img-top" alt="imagen de super héroe/heroína">
   <div class="card-body">
     <h5 class="card-title">${nombre}</h5>
-    <p class="card-text">Fuerza: ${fuerza}</p>
+    <p class="card-text">Nombre real: ${nombreReal} | Raza: ${raza}</p>
+    <p class="card-text">Inteligencia: ${inteligencia} | Alter Ego: ${alterEgo}</p> <!-- hay datos que no está tomando y no entiendo por qué -->
     <hr>
-    <p class="card-text">Fuerza: ${fuerza}</p>
+    <ul>
+      <li class="card-text">Fuerza: ${fuerza}</li>
+      <li class="card-text">Velocidad: ${velocidad}</li>
+      <li class="card-text">Poder: ${poder}</li>
+    </ul>
   </div>`
 
 }
 
 //Función para renderizar el grafico
-function renderizarGraphic(fuerza, combat) {  
+function renderizarGraphic(fuerza, combat, poder) {  
         var chart = new CanvasJS.Chart("chartContainer", {
           animationEnabled: true,
+          theme: "dark1", 
           title: {
             text: "Características"
           },
           data: [{
-            type: "pie",
+            type: "doughnut",
             startAngle: 240,
             yValueFormatString: "##0.00\"%\"",
             indexLabel: "{label} {y}",
@@ -89,8 +102,9 @@ function renderizarGraphic(fuerza, combat) {
             dataPoints: [
               {y: fuerza, label: "Fuerza"},
               {y: combat, label: "Capac. de combate"},
+              //{Y: poder, label: "Poder"}, //Por algún motivo no funciona con más de 2 datos 
               
-            ]
+            ],
           }]
         });
         chart.render();

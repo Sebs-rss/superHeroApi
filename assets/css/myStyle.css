@@ -12,7 +12,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;*/
-    background-color: #f4f4f9;*/
+    background-color: #f4f4f9;
 }
 
 .myNav {
@@ -89,11 +89,11 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    border-radius: 1rem;
 }
 
 .myGraph {
     border-radius: 1rem;
-;
 }
 
 .myButton {
